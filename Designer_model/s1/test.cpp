@@ -2182,6 +2182,7 @@ namespace tmp{
 int main(const int argc,const char** argv){
 
     tmp::run();
+    system("pause");
     return 0;
 }
 
