@@ -13,7 +13,7 @@ extern "C"{
 __FUNCTION__
 #ifdef TRACE_INFO_SUPPORT
 #define SCI_TRACE_LOW(...) \
-printf("%s-%d ret %s(arg):",__FILE__,__LINE__,__FUNCTION__);printf(""__VA_ARGS__);printf("\n");
+printf("%s-%d ret %s(arg):",__FILE__,__LINE__,__FUNCTION__);printf(""##__VA_ARGS__);printf("\n");
 #else
 #define SCI_TRACE_LOW(...)  
 #endif
