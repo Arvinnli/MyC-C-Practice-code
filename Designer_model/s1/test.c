@@ -16,7 +16,7 @@ int main(int argc,char* argv[]){
     // printf("ptr:0x%x\n",ptr);
     // printf("ptr1:0x%x\n",ptr1);
     func("Line%d:hello arvinn\n",__LINE__);
-
+    func("yee haw\n");
 
     return 0;
 }
