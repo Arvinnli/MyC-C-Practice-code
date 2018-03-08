@@ -2714,11 +2714,8 @@ namespace OrderParttern{ // 命令模式
         girl->Notify();
     }
 }
-<<<<<<< HEAD
 namespace AdapterParttern{ // 适配器模式
-=======
-namespace AdapterParttern{//适配器模式
->>>>>>> e2d69688dcb6689aa9fa92b929360228b6bb4c39
+
     class Duck{
         public:
             Duck(){}
@@ -2931,61 +2928,8 @@ namespace facola{//         外观模式
 
     }
 }
-namespace tmp{
-    //模板方法定义了一个算法的步骤,并允许子类为一个或多个步骤提供实现.
-    class CaffeineBeverage{
-        public:
-            CaffeineBeverage(){}
-            virtual void prepareRecipe() final{
-                boilWater();
-                brew();
-                pourInCup();
-                addCondiments();
-            }
-            void boilWater(){
-                cout << __FUNCTION__ << ":" << __LINE__ << endl;
-            }
-            virtual void brew()=0;
-            virtual void addCondiments()=0;
-            void pourInCup(){
-                cout << __FUNCTION__ << ":" << __LINE__ << endl;
-            }
-        private:
-        protected:
-    };
-    class Tea:public CaffeineBeverage{
-        public:
-            Tea(){}
-            virtual void brew() override {
-                cout << "Steeping the tea" << endl;
-            }
-            virtual void addCondiments() override{
-                cout << "Add Lemon" << endl;
-            }
-        private:
-        protected:
-    };
-    class Coffee:public CaffeineBeverage{
-        public:
-            Coffee(){}
-            virtual void brew() override{
-                cout << "Dripping Coffee through filter" << endl;
-            }
-            virtual void addCondiments() override {
-                cout << "Adding Sugar and Milk";
-            }
-        private:
-        protected:
-    };
 
-    void run(){
-        Tea t;
-        t.prepareRecipe();
-    }
-}
-<<<<<<< HEAD
 
-=======
 namespace tmp{
     class CaffeineBeverage{
         public:
@@ -3083,10 +3027,9 @@ namespace tmp{
         protected:
     };
     void run(){
-//page 292
+        //page 292
     }
 }
->>>>>>> e2d69688dcb6689aa9fa92b929360228b6bb4c39
 int main(const int argc,const char** argv){
 
     tmp::run();
