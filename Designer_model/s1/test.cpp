@@ -2714,7 +2714,11 @@ namespace OrderParttern{ // 命令模式
         girl->Notify();
     }
 }
+<<<<<<< HEAD
 namespace AdapterParttern{ // 适配器模式
+=======
+namespace AdapterParttern{//适配器模式
+>>>>>>> e2d69688dcb6689aa9fa92b929360228b6bb4c39
     class Duck{
         public:
             Duck(){}
@@ -2979,11 +2983,127 @@ namespace tmp{
         t.prepareRecipe();
     }
 }
+<<<<<<< HEAD
 
+=======
+namespace tmp{
+    class CaffeineBeverage{
+        public:
+            CaffeineBeverage(){}
+            virtual void prepareRecipe()final{
+                boilWater();
+                brew();
+                pourInCup();
+                addCondiments();
+            }
+            virtual void brew(){
+                cout << "OBJ.brew();" << endl;
+            }
+            virtual void addCondiments(){
+                cout << "OBJ.addCondiments();" << endl;
+            }
+            virtual void boilWater(){
+                cout << "Boiling water" << endl;
+            }
+            virtual void pourInCup(){
+                cout << "Pouring into cup" << endl;
+            }
+        private:
+        protected:
+    };
+    class Tea:public CaffeineBeverage{
+        public:
+            Tea(){}
+            virtual void brew(){
+                cout << "Steeping the tea" << endl;
+            }   
+            virtual void addCondiments(){
+                cout << "Adding Lemon" << endl; 
+            }
+            
+            
+        private:
+        protected:
+    };
+    class Coffee:public CaffeineBeverage{
+        public:
+            Coffee(){}
+            virtual void brew(){
+                cout << "Dripping Coffee through filter" << endl;
+            }
+            virtual void addCondiments(){
+                cout << "Adding Sugar and milk" << endl;
+            }
+        private:
+        protected:
+    };
+    class AbstractClass{
+        public:
+            AbstractClass(){}
+            virtual void templateMethod() final {
+                primitiveOperation1();
+                primitiveOperation2();
+                ConcreteOperation();
+                hook();
+            }
+            virtual void primitiveOperation1(){}
+            virtual void primitiveOperation2(){}
+            virtual void ConcreteOperation()final{
+
+            }
+            void hook(){
+
+            }
+        private:
+        protected:
+    };
+    class CaffeineBeverageWithHook{
+        public:
+            CaffeineBeverageWithHook(){}
+            void prepareRecipe(){
+                boilWater();
+                brew();
+                pourInCup();
+                if(customerWantsCondiments()){
+                    addCondiments();
+                }
+            }
+            virtual void brew(){}
+            virtual void addCondiments(){}
+            virtual void boilWater(){
+                cout << "Boiling water" << endl;
+            }
+            virtual void pourInCup(){
+                cout << "Pouring into cup" << endl;
+            }
+            virtual bool customerWantsCondiments(){
+                return true;
+            }
+        private:
+        protected:
+    };
+    void run(){
+//page 292
+    }
+}
+>>>>>>> e2d69688dcb6689aa9fa92b929360228b6bb4c39
 int main(const int argc,const char** argv){
 
     tmp::run();
     system("pause");
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
