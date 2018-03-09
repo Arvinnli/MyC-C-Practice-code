@@ -4,6 +4,7 @@
 #include <thread>
 #include <memory>
 #include <mutex>
+#include <vector>
 using namespace std;
 
 
@@ -100,7 +101,7 @@ namespace Mutex{
     }
 }
 
-namespace tmp{
+namespace Auto_ptr{
     class Base1{
         public:
             Base1(){}
@@ -144,8 +145,57 @@ namespace tmp{
         
     }
 }
+
+namespace tmp{
+    // template <class T>
+    // // class MyArray{clear
+    // //     public:
+    // //         MyArray(){}
+            
+    // //     private:
+    // //         T* pAddr;
+    // //         int mSize;
+    // //     protected:
+    // // };
+
+    // template T
+    class Base1{
+        public:
+            Base1(){}
+             template<typename T>
+            virtual T fun()=0;
+        private:
+        protected:
+    };
+    class Base2:public Base1{
+        public:
+            Base2(){}
+            virtual template<typename T>
+            T fun(){
+
+            }
+        private:
+        protected:
+    };
+    vector <int> fun(vector <int> a){
+        for(int i=0;i<a.size();i++){
+            cout << "a[" << i << "]" << a[i] << endl;
+        }
+        return a;
+    }
+    void run(){
+        vector <int> a ;
+        a.push_back(2);
+        a.push_back(5);
+        a.push_back(6);
+        vector <int> b = fun(a);
+        // fun(b);
+
+    }
+}
 int main(int argc,char* argv[]){
-    tmp::test t;
-    t.run();
+    // tmp::test t;
+    // t.run();
+    tmp::run();
     return 0;
 }

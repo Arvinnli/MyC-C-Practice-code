@@ -2857,7 +2857,6 @@ namespace AdapterParttern{ // 适配器模式
 
     }
 }
-
 namespace facola{//         外观模式
     class Sub_work1{
         public:
@@ -2928,9 +2927,7 @@ namespace facola{//         外观模式
 
     }
 }
-
-
-namespace tmp{
+namespace facolaParttern{
     class CaffeineBeverage{
         public:
             CaffeineBeverage(){}
@@ -3026,10 +3023,184 @@ namespace tmp{
         private:
         protected:
     };
+    class CoffeeWithHook:public CaffeineBeverageWithHook{
+        public:
+            CoffeeWithHook(){}
+            virtual void brew(){
+                cout << "Dripping Coffee through filter" << endl;
+            }
+            virtual void addCondiments(){
+                cout << "Adding Sugar and Milk" << endl;
+            }
+            virtual bool customerWantsCondiments(){
+                string answer = getUserInput();
+                char ch = answer.c_str()[0];
+                if(ch == 'y' || ch == 'Y'){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            
+        private:
+            string getUserInput(){
+                string answer;
+                cout << "Would you like milk and sugar with your coffee (y/n)? " << endl;
+
+                cin >> answer;
+                return answer;
+            }
+        protected:
+    };
+    class TeaWithHook:public CaffeineBeverageWithHook{
+        public:
+            TeaWithHook(){}
+            virtual void brew(){
+                cout << "Steeping the tea" << endl;
+            }   
+            virtual void addCondiments(){
+                cout << "Adding Lemon" << endl; 
+            }
+            virtual bool customerWantsCondiments(){
+                string answer = getUserInput();
+                char ch = answer.c_str()[0];
+                if(ch == 'y' || ch == 'Y'){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            virtual string getUserInput(){
+                string answer;
+                cout << "Would you like lemon with your tea (y/n)?" << endl;
+                cin >> answer;
+                return answer;
+            }
+        private:
+        protected:
+    };
     void run(){
-        //page 292
+        TeaWithHook teawithhook;
+        CoffeeWithHook coffeewithhook;
+
+        cout << "Making tea..." <<endl;
+        teawithhook.prepareRecipe();
+
+        cout << "Making coffee..." << endl;
+        coffeewithhook.prepareRecipe();
     }
 }
+
+namespace tmp{
+    class MenuItem{
+        public:
+            MenuItem(   string name,
+                        string description,
+                        bool vegetarian,
+                        double price)
+            {
+                this->_name = name;
+                this->_description = description;
+                this->_vegetarian = vegetarian;
+                this->_price = price;
+            }
+            string getName(){
+                return _name;
+            }
+            string getDescription(){
+                return _description;
+            }
+            double getPrice(){
+                return _price;
+            }
+            bool isVegetarian(){
+                return _vegetarian;
+            }
+        private:
+            string _name;
+            string _description;
+            bool _vegetarian;
+            double _price;
+        protected:
+    };
+
+    class PancakeHouseMenu{
+        public:
+            PancakeHouseMenu(){
+                addItem("k&b's pancake Breakfast",
+                "Pancakes with scrambled eggs , and toast",
+                true,2.99);
+                addItem("Regular Pancake Breakfast",
+                "Pancakes with fried eggs, sausage",
+                false,2.99);
+                addItem("Blueberry Pancakes",
+                "Pancakes made with fresh blueberries",
+                true,3.49);
+                addItem("Waffles",
+                "Waffles, with your choice of blueberries or strawberries",
+                true,3.59);
+            }
+            virtual void addItem(string name,string description,
+                                bool vegetarian, double price){
+                MenuItem* menuitem = new MenuItem(name,description,vegetarian,price);
+                menuItems.push_back(menuitem);
+            }
+            virtual vector<MenuItem*> getMenuItems(){
+                return menuItems;
+            }
+        private:
+            vector <MenuItem*> menuItems;
+        protected:
+    };
+    class Iterator{
+        public:
+            iterator(){}
+            virtual bool hasNext()=0;
+            // template <typename T> 
+            virtual void* next()=0;
+        private:
+        protected:
+    };
+    class DinerMenuIterator:public Iterator{
+        public:
+            vector <MenuItem> mItems;
+            int mPosition;
+            DinerMenuIterator(vector<MenuItem> items){
+                this->mItems = items;
+            }
+            virtual void* next(){
+                MenuItem* menuitem = &mItems[mPosition];
+                mPosition++;
+                return menuitem;
+            }
+            virtual bool hasNext(){
+                return mPosition < mItems.size();
+            }
+        private:
+        protected:
+    };
+
+    class DinerMenu{
+        public:
+            DinerMenu(){}
+            static const int MAX_ITEMS = 6;
+            int numberOfItems = 0;
+            vector<MenuItem> menuItems;
+
+            Iterator* createIterator(){
+                return new DinerMenuIterator(menuItems);
+            }
+        private:
+        protected:
+    };
+
+    void run(){
+        //page 328
+    }
+}
+
+
+
 int main(const int argc,const char** argv){
 
     tmp::run();
