@@ -3092,110 +3092,57 @@ namespace facolaParttern{
 }
 
 namespace tmp{
-    class MenuItem{
-        public:
-            MenuItem(   string name,
-                        string description,
-                        bool vegetarian,
-                        double price)
-            {
-                this->_name = name;
-                this->_description = description;
-                this->_vegetarian = vegetarian;
-                this->_price = price;
-            }
-            string getName(){
-                return _name;
-            }
-            string getDescription(){
-                return _description;
-            }
-            double getPrice(){
-                return _price;
-            }
-            bool isVegetarian(){
-                return _vegetarian;
-            }
-        private:
-            string _name;
-            string _description;
-            bool _vegetarian;
-            double _price;
-        protected:
-    };
-
-    class PancakeHouseMenu{
-        public:
-            PancakeHouseMenu(){
-                addItem("k&b's pancake Breakfast",
-                "Pancakes with scrambled eggs , and toast",
-                true,2.99);
-                addItem("Regular Pancake Breakfast",
-                "Pancakes with fried eggs, sausage",
-                false,2.99);
-                addItem("Blueberry Pancakes",
-                "Pancakes made with fresh blueberries",
-                true,3.49);
-                addItem("Waffles",
-                "Waffles, with your choice of blueberries or strawberries",
-                true,3.59);
-            }
-            virtual void addItem(string name,string description,
-                                bool vegetarian, double price){
-                MenuItem* menuitem = new MenuItem(name,description,vegetarian,price);
-                menuItems.push_back(menuitem);
-            }
-            virtual vector<MenuItem*> getMenuItems(){
-                return menuItems;
-            }
-        private:
-            vector <MenuItem*> menuItems;
-        protected:
-    };
-    class Iterator{
+    template<class Item>
+    class iterator{
         public:
             iterator(){}
-            virtual bool hasNext()=0;
-            // template <typename T> 
-            virtual void* next()=0;
+            virtual void first()=0;
+            virtual void next()=0;
+            virtual Item* curItem()=0;
+            virtual bool isDone()=0;
         private:
         protected:
     };
-    class DinerMenuIterator:public Iterator{
+    template<class Item>class ConcreteAggregate;
+    template<class Item>
+    class ConcreteIterator:public Iterator<Item>{
+        ConcreteAggregate<Item>* mAggr;
+        int cur;
         public:
-            vector <MenuItem> mItems;
-            int mPosition;
-            DinerMenuIterator(vector<MenuItem> items){
-                this->mItems = items;
+            ConcreteIterator(ConcreteAggregate<Item>* aggr){
+                mAggr = aggr;
             }
-            virtual void* next(){
-                MenuItem* menuitem = &mItems[mPosition];
-                mPosition++;
-                return menuitem;
+            virtual void first(){
+                cur = 0;
             }
-            virtual bool hasNext(){
-                return mPosition < mItems.size();
+            virtual void next(){
+                if(cur< mAggr->getLen()){
+                    cur++;
+                }
             }
+            virtual Item* curItem(){
+                if(cur < mAggr->getLen()){
+                    return &(*mAggr)[cur];
+                }else {
+                    return NULL;
+                }
+            }
+            virtual bool isDone(){
+                return (cur >= mAggr->getLen());
+            }
+            
         private:
         protected:
     };
 
-    class DinerMenu{
-        public:
-            DinerMenu(){}
-            static const int MAX_ITEMS = 6;
-            int numberOfItems = 0;
-            vector<MenuItem> menuItems;
-
-            Iterator* createIterator(){
-                return new DinerMenuIterator(menuItems);
-            }
-        private:
-        protected:
-    };
 
     void run(){
         //page 328 jjj
+        // PancakeHouseMenu mPancakeHouseMenu;
+        // DinerMenu mDinerMenu;
+
+        // Waitress waitress(mPancakeHouseMenu,mDinerMenu);
+        // waitress.printMenu();
     }
 }
 
