@@ -3091,11 +3091,11 @@ namespace facolaParttern{
     }
 }
 
-namespace tmp{
+namespace IteratorParttern{//   ≈‰∆˜ƒ£ Ω
     template<class Item>
-    class iterator{
+    class Iterator{
         public:
-            iterator(){}
+            Iterator(){}
             virtual void first()=0;
             virtual void next()=0;
             virtual Item* curItem()=0;
@@ -3134,19 +3134,56 @@ namespace tmp{
         private:
         protected:
     };
-
+    template<class Item>
+    class Aggregate{
+        public:
+            Aggregate(){}
+            virtual Iterator<Item>* createIterator()=0;
+        private:
+        protected:
+    };
+    template<class Item>
+    class ConcreteAggregate:public Aggregate<Item>{
+        vector<Item> mData;
+        public:
+            ConcreteAggregate(){
+                mData.push_back(1);
+                mData.push_back(2);
+                mData.push_back(3);
+            }
+            virtual Iterator<Item>* createIterator(){
+                return new ConcreteIterator<Item>(this);
+            }
+            Item& operator[](int idx){
+                return mData[idx];
+            }
+            int getLen(){
+                return mData.size();
+            }
+        private:
+        protected:
+    };
 
     void run(){
-        //page 328 jjj
-        // PancakeHouseMenu mPancakeHouseMenu;
-        // DinerMenu mDinerMenu;
-
-        // Waitress waitress(mPancakeHouseMenu,mDinerMenu);
-        // waitress.printMenu();
+        Aggregate<int>* aggr = new ConcreteAggregate<int>();
+        Iterator<int>* it = aggr->createIterator();
+        for(it->first();!it->isDone();it->next()){
+            cout << *(it->curItem()) << endl;
+        }
+        delete it;
+        delete aggr;
+        
     }
 }
 
+namespace tmp{
+    
 
+
+    void run(){
+
+    }
+}
 
 int main(const int argc,const char** argv){
 
