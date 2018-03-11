@@ -3177,7 +3177,63 @@ namespace IteratorParttern{// ÊÊÅäÆ÷Ä£Ê½
 }
 
 namespace tmp{
-    
+    class GumballMachine{
+            const static enum mState_E{
+                SOLD_OUT = 0,
+                NO_QUARTER = 1,
+                HAS_QUARTER = 2,
+                SOLD = 3,
+            };
+
+            int mState ;
+            int mCount ;
+        public:
+            GumballMachine(int count){
+                mCount = count ;
+                mState = SOLD_OUT;
+                if(count>0){
+                    state = NO_QUARTER;
+                }
+            }
+            virtual void insertQuarter(){
+                switch(mState){
+                    case SOLD_OUT:{
+                        cout << "You can't insert another quarter" << endl;
+                    }break;
+                    case NO_QUARTER:{
+                        mState = HAS_QUARTER;
+                        cout << "You insert a quarter" << endl;
+                    }break;
+                    case HAS_QUARTER:{
+                        cout << "You can't insert a quarter, the machine is sold out" << endl;
+                    }break;
+                    case SOLD:{
+                        cout << "Please wait, we're already giving you a gumball" << endl;                     
+                    }break;
+                }
+            }
+            virtual void ejectQuarter(){
+                switch(mState){
+                    case SOLD_OUT:{
+                        cout << "Quarter returned" << endl;
+                        mState = NO_QUARTER;
+                    }break;
+                    case NO_QUARTER:{
+                        mState = HAS_QUARTER;
+                        cout << "You insert a quarter" << endl;
+                    }break;
+                    case HAS_QUARTER:{
+                        cout << "You can't insert a quarter, the machine is sold out" << endl;
+                    }break;
+                    case SOLD:{
+                        cout << "Please wait, we're already giving you a gumball" << endl;                     
+                    }break;
+                }
+            }
+            
+        private:
+        protected:
+    };
 
 
     void run(){
