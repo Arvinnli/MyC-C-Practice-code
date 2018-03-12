@@ -166,16 +166,24 @@ namespace tmp{
         }
         return a;
     }
+    class B{
+        public:
+            B(){}
+            
+        private:
+        protected:
+    };
+    class Test{
+        public:
+            Test(B& b):_b(b){}
+            
+        private:
+            B& _b;
+        protected:
+    };
     void run(){
-        vector<int*> mPtrs;
-        int* ptr = new int();
-        mPtrs.push_back(ptr);
-        ptr = new int();
-        mPtrs.push_back(ptr);
-        for(int i=0;i<mPtrs.size();i++){
-            int * p = mPtrs[i];
-            delete p;
-        }
+        B b;
+        Test t(b);
 
     }
 }

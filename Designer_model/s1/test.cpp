@@ -3177,67 +3177,8 @@ namespace IteratorParttern{// 适配器模式
 }
 
 namespace tmp{
-<<<<<<< HEAD
-    class GumballMachine{
-            const static enum mState_E{
-                SOLD_OUT = 0,
-                NO_QUARTER = 1,
-                HAS_QUARTER = 2,
-                SOLD = 3,
-            };
-
-            int mState ;
-            int mCount ;
-        public:
-            GumballMachine(int count){
-                mCount = count ;
-                mState = SOLD_OUT;
-                if(count>0){
-                    state = NO_QUARTER;
-                }
-            }
-            virtual void insertQuarter(){
-                switch(mState){
-                    case SOLD_OUT:{
-                        cout << "You can't insert another quarter" << endl;
-                    }break;
-                    case NO_QUARTER:{
-                        mState = HAS_QUARTER;
-                        cout << "You insert a quarter" << endl;
-                    }break;
-                    case HAS_QUARTER:{
-                        cout << "You can't insert a quarter, the machine is sold out" << endl;
-                    }break;
-                    case SOLD:{
-                        cout << "Please wait, we're already giving you a gumball" << endl;                     
-                    }break;
-                }
-            }
-            virtual void ejectQuarter(){
-                switch(mState){
-                    case SOLD_OUT:{
-                        cout << "Quarter returned" << endl;
-                        mState = NO_QUARTER;
-                    }break;
-                    case NO_QUARTER:{
-                        mState = HAS_QUARTER;
-                        cout << "You insert a quarter" << endl;
-                    }break;
-                    case HAS_QUARTER:{
-                        cout << "You can't insert a quarter, the machine is sold out" << endl;
-                    }break;
-                    case SOLD:{
-                        cout << "Please wait, we're already giving you a gumball" << endl;                     
-                    }break;
-                }
-            }
-            
-        private:
-        protected:
-    };
-
-=======
-#ifdef __ORG  
+    #define log() cout << __FUNCTION__ << ":" << __LINE__ << endl
+    #ifdef __ORG  
     class GumballMachine{
         enum STATE_E{
             SOLD_OUT = 0,
@@ -3252,7 +3193,6 @@ namespace tmp{
                     mState = NO_QUARTER;
                 }
             }
->>>>>>> 47a0cb84e4b2165fbef3232f2a7c6ac1441b6af3
 
             virtual void insertQuarter(){//塞入 25分币
                 switch(mState){
@@ -3335,7 +3275,7 @@ namespace tmp{
             int mCount;
         protected:
     };       
-    #define log() cout << __FUNCTION__ << ":" << __LINE__ << endl
+    
     void run(){
         GumballMachine gm(5);
         cout << "gumballMachine" << endl;
@@ -3369,7 +3309,7 @@ namespace tmp{
 
         log();
     }
-#endif
+    #endif
     class State{
         public:
             State(){}
@@ -3380,7 +3320,33 @@ namespace tmp{
         private:
         protected:
     };
-    class GumballMachine;
+    class GumballMachine{
+        public:
+            GumballMachine(int numberOfGumballs);
+            ~GumballMachine();
+            void insertQuarter();
+            void ejectQuarter();
+            void turnCrank();
+            void setState(State* state);
+            void releaseBall();
+            State* getSoldOutState();
+            State* getNoQuarterState();
+            State* getHasQuarterState();
+            State* getSoldState();
+            State* getWinnerState();
+            int getCount();
+
+        private:
+            State* mState;
+            State* soldOutState;
+            State* noQuarterState;
+            State* hasQuarterState;
+            State* soldState;
+            State* winnerState;
+            int mCount;
+            // int randomWinner;
+        protected:
+    };
     class NoQuarterState:public State{
         public:
             NoQuarterState(GumballMachine* gm):mGm(gm){}
@@ -3389,7 +3355,7 @@ namespace tmp{
                 mGm->setState(mGm->getHasQuarterState());
             }
             virtual void ejectQuarter(){
-                cou << "You haven't inserted a quarter" << endl;
+                cout << "You haven't inserted a quarter" << endl;
             }
             virtual void turnCrank(){
                 cout << "You turned, but there's no quarter" << endl;
@@ -3414,7 +3380,13 @@ namespace tmp{
             }
             virtual void turnCrank(){
                 cout << "You turned..." << endl;
-                mGm->setState(mGm->getSoldState());
+                // mGm->setState(mGm->getSoldState());
+                int rd = rand()%10;
+                if(rd==0&&mGm->getCount()>1){
+                    mGm->setState(mGm->getWinnerState());
+                }else{
+                    mGm->setState(mGm->getSoldState());
+                }
             }
             virtual void dispense(){
                 cout << "No gumball dispensed" << endl;
@@ -3423,31 +3395,162 @@ namespace tmp{
             GumballMachine* mGm;
         protected:
     };
-
-    class GumballMachine{
+    class SoldState:public State{
         public:
-            GumballMachine(int numberOfGumballs){
-                soldOutState = new SoldOutState(this);
-                noQuarterState = new NoQuarterState(this);
-                hasQuarterState = new HasQuarterState(this);
-                soldState = new SoldState(this);
-                mCount = numberOfGumballs;
-                if(numberOfGumballs>0){
-                    state = noQuarterState;
+            SoldState(GumballMachine* gm){
+                this->mGm = gm;
+            }
+            virtual void insertQuarter(){
+                cout << "Please wait, we're already giving you a gumball" << endl;
+            }
+            virtual void ejectQuarter(){
+                cout << "Sorry, you already turned the crank" << endl;
+            }
+            virtual void turnCrank(){
+                cout << "Turning twice doesn't get you another gumball!" << endl;
+            }
+            virtual void dispense(){
+                mGm->releaseBall();
+                if(mGm->getCount()>0){
+                    mGm->setState(mGm->getNoQuarterState());
+                }else{
+                    cout << "Oops, out of gumballs!" << endl;
+                    mGm->setState(mGm->getSoldOutState());
                 }
             }
-            ~GumballMachine
+        private:
+            GumballMachine* mGm;
+        protected:
+    };
+    class SoldOutState:public State{
+        public:
+            SoldOutState(GumballMachine* gm){
+                mGm = gm;
+            }
+            virtual void insertQuarter(){
+                cout << "You can't insert a quarter, the machine is sold out" << endl;
+            }
+            virtual void ejectQuarter(){
+                cout << "You can't eject, you haven't inserted aquarter yet" << endl;
+            }
+            virtual void turnCrank(){
+                cout << "You turned, but ther are no gumballs" << endl;
+            }
+            virtual void dispense(){
+                cout << "No gumball dispensed" << endl;
+            }
+        private:
+            GumballMachine* mGm;
+        protected:
+    };
+    class WinnerState:public State{
+        public:
+            WinnerState(GumballMachine* gm){
+                mGm = gm;
+            }
+            virtual void insertQuarter(){
+                log();
+            }
+            virtual void ejectQuarter(){
+                log();
+            }
+            virtual void turnCrank(){
+                log();
+            }
+            virtual void dispense(){
+                cout << "YOU'RE A WINNER! You get two gumballs for your quarter"<< endl;
+                mGm->releaseBall();
+                if(mGm->getCount()==0){
+                    mGm->setState(mGm->getSoldOutState());
+                }else{
+                    mGm->releaseBall();
+                    if(mGm->getCount()>0){
+                        mGm->setState(mGm->getNoQuarterState());
+                    }else{
+                        cout << "Oops, out of gumbalss" << endl;
+                        mGm->setState(mGm->getSoldOutState());
+                    }                   
+                }
+            }
             
         private:
-            State* mState;
-            State* soldOutState;
-            State* noQuarterState;
-            State* hasQuarterState;
-            State* soldState;
-            int mCount;
+            GumballMachine* mGm;
         protected:
     };
 
+
+    GumballMachine::GumballMachine(int numberOfGumballs){
+        soldOutState = new SoldOutState(this);
+        noQuarterState = new NoQuarterState(this);
+        hasQuarterState = new HasQuarterState(this);
+        soldState = new SoldState(this);
+        winnerState = new WinnerState(this);
+        mCount = numberOfGumballs;
+        if(numberOfGumballs>0){
+            mState = noQuarterState;
+        }
+    }
+    GumballMachine::~GumballMachine(){
+        // delete mState;
+        delete soldOutState;
+        delete noQuarterState;
+        delete hasQuarterState;
+        delete soldState;
+    }
+    void GumballMachine::insertQuarter(){
+        mState->insertQuarter();
+    }
+    void GumballMachine::ejectQuarter(){
+        mState->ejectQuarter();
+    }
+    void GumballMachine::turnCrank(){
+        mState->turnCrank();
+        mState->dispense();
+    }
+    void GumballMachine::setState(State* state){
+        mState = state;
+    }
+    void GumballMachine::releaseBall(){
+        cout << "A gumball comes rolling out the slot..." << endl;
+        if(mCount!=0){
+            mCount--;
+        }
+    }
+    State* GumballMachine::getSoldOutState(){
+        return this->soldOutState;
+    }
+    State* GumballMachine::getNoQuarterState(){
+        return this->noQuarterState;
+    }
+    State* GumballMachine::getHasQuarterState(){    
+        return this->hasQuarterState;
+    }
+    State* GumballMachine::getSoldState(){
+        return this->soldState;
+    }
+    State* GumballMachine::getWinnerState(){
+        return this->winnerState;
+    }
+    int GumballMachine::getCount(){
+        return mCount;
+    }
+
+    void run(){
+        GumballMachine gm(5);
+        
+        log();
+
+        gm.insertQuarter();
+        gm.turnCrank();
+
+        log();
+
+        gm.insertQuarter();
+        gm.turnCrank();
+        gm.insertQuarter();
+        gm.turnCrank();
+    }
+    
 }
 
 int main(const int argc,const char** argv){
