@@ -3,8 +3,12 @@
 #include <mutex>
 #include <vector>
 #include "../stdfx.h"
+
+
 using namespace std;
 //chinese : GBK
+int arg_count;
+char** arg_arr;
 
 namespace music_8bit{
     /*返回数字简谱中数字t所对应的频率*/
@@ -3090,7 +3094,6 @@ namespace facolaParttern{
         coffeewithhook.prepareRecipe();
     }
 }
-
 namespace IteratorParttern{// 适配器模式
     template<class Item>
     class Iterator{
@@ -3175,8 +3178,7 @@ namespace IteratorParttern{// 适配器模式
         
     }
 }
-
-namespace tmp{
+namespace StateParttern{    // 状态模式
     #define log() cout << __FUNCTION__ << ":" << __LINE__ << endl
     #ifdef __ORG  
     class GumballMachine{
@@ -3552,9 +3554,311 @@ namespace tmp{
     }
     
 }
+namespace Player{
+    class State{
+        public:
+            State(){}
+            virtual void play()=0;
+            virtual void pause()=0;
+            virtual void stop()=0;
+        private:
+        protected:
+    };
+    class Player{
+        public:
+            Player();
+            ~Player();
+            void play();
+            void pause();
+            void stop();
+            void setState(State* state){
+                mCurState = state;
+            }
 
-int main(const int argc,const char** argv){
+            State* getCurState(){
+                return mCurState;
+            }
+            State* getPlayingState(){
+                return mPlayingState;
+            }
+            State* getPauseState(){
+                return mPauseState;
+            }
+            State* getStopState(){
+                return mStopState;
+            }
+        private:
+            State* mCurState;
+            State* mPlayingState;
+            State* mPauseState;
+            State* mStopState;
+        protected:
+    };
+    class PlayingState:public State{
+        public:
+            PlayingState(Player* player){
+                mPlayer = player;
+            }
+            virtual void play(){
+                cout << "playing..." << endl;
+            }
+            virtual void pause(){
+                cout << "Paused" << endl;
+                mPlayer->setState(mPlayer->getPauseState());
+            }
+            virtual void stop(){
+                cout << "Stoped" << endl;
+                mPlayer->setState(mPlayer->getStopState());
+            }
+            
+        private:
+            Player* mPlayer;
+        protected:
+    };
+    class PauseState:public State{
+        public:
+            PauseState(Player* player){
+                mPlayer = player;
+            }
+            virtual void play(){
+                cout << "resume" << endl;
+                mPlayer->setState(mPlayer->getPlayingState());
+            }
+            virtual void pause(){
+                cout << "Cur state is Paused" << endl;
+            }
+            virtual void stop(){
+                cout << "Stop !!!" << endl;
+                mPlayer->setState(mPlayer->getStopState());
+            }
+        private:
+            Player* mPlayer;
+        protected:
+    };
+    class StopState:public State{
+        public:
+            StopState(Player* player){
+                mPlayer = player;
+            }
+            virtual void play(){
+                cout << "Start play" << endl;
+                mPlayer->setState(mPlayer->getPlayingState());
+            }
+            virtual void pause(){
+                cout << "Cur state is Stoped" << endl;
+            }
+            virtual void stop(){
+                cout << "Cur state is Stoped" << endl;                
+            }
+        private:
+            Player* mPlayer;
+        protected:
+    };
+    Player::Player(){
+        mPlayingState = new PlayingState(this);
+        mPauseState = new PauseState(this);
+        mStopState = new StopState(this);
+        mCurState = mStopState;
+    }
+    Player::~Player(){
+        delete (PlayingState*)mPlayingState;
+        delete (PauseState*)mPauseState;
+        delete (StopState*)mStopState;
+        mPlayingState = NULL;
+        mPauseState = NULL;
+        mStopState = NULL;
+    }
+    void Player::play(){
+        mCurState->play();
+    }
+    void Player::pause(){
+        mCurState->pause();
+    }
+    void Player::stop(){
+        mCurState->stop();
+    }
+    void run(){
+        Player player;
+        player.play();
+        player.stop();
+        player.pause();
+        player.stop();
+        player.play();
+        player.pause();
+        player.play();
+        player.stop();
+    }
+}
+namespace PhoxyParttern{//代理模式
+    class Ifactory{
+        public:
+            Ifactory(){}
+            virtual void makeProduct()=0;
+        private:
+        protected:
+    };
+    class PhoneFactory:public Ifactory{
+        public:
+            PhoneFactory(){}
+            virtual void makeProduct(){
+                cout << "Make cell phone" << endl;
+            }
+        private:
+        protected:
+    };
+    class FoxconnProxy:public Ifactory{
+        public:
+            FoxconnProxy(Ifactory* factory){
+                mReal = factory;
+            }
+            virtual void makeProduct(){
+                mReal->makeProduct();
+            }
+            
+        private:
+            Ifactory* mReal;
+        protected:
+    };
+    void run(){
 
+    }
+}
+namespace tmp{
+    class Quackable{
+        public:
+            Quackable(){}
+            virtual void quack()=0;
+            operator Quackable*(){// is dangerous
+                return this;
+            }
+        private:
+        protected:
+    };
+
+    class MallardDuck:public Quackable{
+        public:
+            MallardDuck(){}
+            virtual void quack(){
+                cout << "Quack" << endl;
+            }
+        private:
+        protected:
+    };
+    class RedheadDuck:public Quackable{
+        public:
+            RedheadDuck(){}
+            virtual void quack(){
+                cout<< "Quack" << endl;
+            }
+        private:
+        protected:
+    };
+    class DuckCall:public Quackable{
+        public:
+            DuckCall(){}
+            virtual void quack(){
+                cout << "Kwak" << endl;
+            }
+        private:
+        protected:
+    };
+    class RubberDuck:public Quackable{
+        public:
+            RubberDuck(){}
+            virtual void quack(){
+                cout << "Squack" << endl;
+            }
+        private:
+        protected:
+    };
+    class Goose{
+        public:
+            Goose(){}
+            virtual void honk(){
+                cout << "Honk" << endl;
+            }
+        private:
+        protected:
+    };
+    class GooseAdapter:public Quackable{
+        public:
+            GooseAdapter(Goose* goose){
+                mGoose = goose;
+            }
+            virtual void quack(){
+                mGoose->honk();
+            }
+        private:
+            Goose* mGoose;
+        protected:
+    };
+    class QuackCounter:public Quackable{         
+        public:
+            QuackCounter(Quackable* duck){
+                mDuck = duck;               
+            }  
+            virtual void quack();
+            static int getQuacks();
+        private:
+            Quackable* mDuck;
+            static int numberOfQuacks;
+        protected:
+    };
+    int QuackCounter::numberOfQuacks = 0;
+    void QuackCounter::quack(){
+        mDuck->quack();
+        QuackCounter::numberOfQuacks++;
+    }
+    int QuackCounter::getQuacks(){
+        return QuackCounter::numberOfQuacks;
+    }
+    class DuckSimulator{
+        public:
+            DuckSimulator(){}
+            void simulate(){
+                MallardDuck md;
+                RedheadDuck rd;
+                DuckCall dc;
+                RubberDuck rd1; 
+                Goose goose;
+                GooseAdapter ga(&goose);
+
+                simulate(QuackCounter(md));
+                simulate(QuackCounter(rd));
+                simulate(QuackCounter(dc));
+                simulate(QuackCounter(rd1));
+                simulate(ga);
+
+                cout << "The ducks quacked " ;
+                cout << QuackCounter::getQuacks() << " times" << endl;
+            }
+            void simulate(Quackable* duck){
+                duck->quack();
+            }
+        private:
+        protected:
+    };
+   
+    class AbstractDuckFactory{
+        public:
+            AbstractDuckFactory(){}
+            virtual Quackable* createMallardDuck()=0;
+            virtual Quackable* createRedheadDuck()=0;
+            virtual Quackable* createDuckCall()=0;
+            virtual Quackable* createRubberDuck()=0;
+        private: //page 509
+        protected:
+    };
+    void run(){
+        DuckSimulator ds;
+        ds.simulate();
+    }
+}
+
+
+int main(int argc,char** argv){
+    arg_count = argc;
+    arg_arr = argv;
     tmp::run();
     system("pause");
     return 0;

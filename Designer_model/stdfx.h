@@ -7,8 +7,11 @@ extern "C"{
 
 
 #include <stdio.h>
+#include <winsock2.h>
 #include <assert.h>
 #include <windows.h>
+#include <stdlib.h>
+
 // #include <st\
 __FUNCTION__
 #ifdef TRACE_INFO_SUPPORT
