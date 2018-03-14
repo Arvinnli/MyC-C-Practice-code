@@ -3849,6 +3849,42 @@ namespace tmp{
         private: //page 509
         protected:
     };
+    class DuckFactory:public AbstractFactory{
+        public:
+            DuckFactory(){}
+            virtual Quackable* createMallardDuck(){
+                return new MallardDuck();
+            }
+            virtual Quackable* createRedheadDuck(){
+                return new RedheadDuck();
+            }
+            virtual Quackable* createDuckCall(){
+                return new DuckCall();
+            }
+            virtual Quackable* createRubberDuck(){
+                return new RubberDuck();
+            }
+        private:
+        protected:
+    };
+    class CountingDuckFactory:public AbstractDuckFactory{
+        public:
+            CountingDuckFactory(){}
+            virtual Quackable* createMallardDuck(){
+                return new QuackCounter(new MallardDuck());
+            }
+            virtual Quackable* createRedheadDuck(){
+                return new QuackCounter(new RedheadDuck());
+            }
+            virtual Quackable* createDuckCall(){
+                return new QuackCounter(new DuckCall());
+            }
+            virtual Quackable* createRubberDuck(){
+                return new QuackCounter(new RubberDuck());
+            }
+        private:
+        protected:
+    };
     void run(){
         DuckSimulator ds;
         ds.simulate();
