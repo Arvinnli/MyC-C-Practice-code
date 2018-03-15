@@ -7,11 +7,14 @@ CC = gcc
 SRC = test.c
 FLAG = 
 INTELASM = -masm=intel
+# INTELASM = -masm=att
+# INTELASM = 
+
 DEBUG_FLAG = -DTRACE_INFO_SUPPORT
 LIB = -lws2_32
 
 asm:$(SRC)
-		@$(CC) -S $(SRC) -o $(OBJ).s
+		$(CC) $(INTELASM) -S $(SRC) -o  $(OBJ).s
 		
 
 obj:$(SRC)
