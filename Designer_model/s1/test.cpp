@@ -3799,6 +3799,9 @@ namespace tmp{
             }  
             virtual void quack();
             static int getQuacks();
+            Quackable* getDuck(){
+                return mDuck;
+            }
         private:
             Quackable* mDuck;
             static int numberOfQuacks;
@@ -3812,32 +3815,7 @@ namespace tmp{
     int QuackCounter::getQuacks(){
         return QuackCounter::numberOfQuacks;
     }
-    class DuckSimulator{
-        public:
-            DuckSimulator(){}
-            void simulate(){
-                MallardDuck md;
-                RedheadDuck rd;
-                DuckCall dc;
-                RubberDuck rd1; 
-                Goose goose;
-                GooseAdapter ga(&goose);
 
-                simulate(QuackCounter(md));
-                simulate(QuackCounter(rd));
-                simulate(QuackCounter(dc));
-                simulate(QuackCounter(rd1));
-                simulate(ga);
-
-                cout << "The ducks quacked " ;
-                cout << QuackCounter::getQuacks() << " times" << endl;
-            }
-            void simulate(Quackable* duck){
-                duck->quack();
-            }
-        private:
-        protected:
-    };
    
     class AbstractDuckFactory{
         public:
@@ -3849,22 +3827,49 @@ namespace tmp{
         private: //page 509
         protected:
     };
-    class DuckFactory:public AbstractFactory{
+    class DuckFactory:public AbstractDuckFactory{
         public:
             DuckFactory(){}
+            ~DuckFactory(){
+                #ifdef __FACTORY_CTRL_DELETE_PRODUCT
+                for(int i=0;i<mQuackables.size();i++){
+                    Quackable* ptr = mQuackables[i];
+                    delete ptr;
+                }
+                #endif
+            }
             virtual Quackable* createMallardDuck(){
-                return new MallardDuck();
+                Quackable* quackable = new MallardDuck();
+                #ifdef __FACTORY_CTRL_DELETE_PRODUCT                
+                mQuackables.push_back(quackable);
+                #endif
+                return quackable;
             }
             virtual Quackable* createRedheadDuck(){
-                return new RedheadDuck();
+                Quackable* quackable = new RedheadDuck();
+                #ifdef __FACTORY_CTRL_DELETE_PRODUCT                
+                mQuackables.push_back(quackable);
+                #endif
+                return quackable;
             }
             virtual Quackable* createDuckCall(){
-                return new DuckCall();
+                Quackable* quackable = new DuckCall();
+                #ifdef __FACTORY_CTRL_DELETE_PRODUCT
+                mQuackables.push_back(quackable);
+                #endif
+                return quackable;
             }
             virtual Quackable* createRubberDuck(){
-                return new RubberDuck();
+                Quackable* quackable = new RubberDuck();
+                #ifdef __FACTORY_CTRL_DELETE_PRODUCT
+                mQuackables.push_back(quackable);
+                #endif
+                return quackable;
             }
         private:
+            #ifdef __FACTORY_CTRL_DELETE_PRODUCT
+            vector<Quackable*> mQuackables;
+            #endif
         protected:
     };
     class CountingDuckFactory:public AbstractDuckFactory{
@@ -3881,6 +3886,69 @@ namespace tmp{
             }
             virtual Quackable* createRubberDuck(){
                 return new QuackCounter(new RubberDuck());
+            }
+        private:
+            // vector<
+        protected:
+    };
+    class DuckSimulator{
+        public:
+            DuckSimulator(){}
+            void simulate(){
+                // MallardDuck md;
+                // RedheadDuck rd;
+                // DuckCall dc;
+                // RubberDuck rd1; 
+                // Goose goose;
+                // GooseAdapter ga(&goose);
+
+                // simulate(QuackCounter(md));
+                // simulate(QuackCounter(rd));
+                // simulate(QuackCounter(dc));
+                // simulate(QuackCounter(rd1));
+                // simulate(ga);
+
+                // cout << "The ducks quacked " ;
+                // cout << QuackCounter::getQuacks() << " times" << endl;
+                CountingDuckFactory factory;
+                simulate(&factory);
+
+            }
+            void simulate(Quackable* duck){
+                duck->quack();
+            }
+            void simulate(AbstractDuckFactory* factory){
+                Quackable* mallardduck = factory->createMallardDuck();
+                Quackable* redheadduck = factory->createRedheadDuck();
+                Quackable* duckcall = factory->createDuckCall();
+                Quackable* rubberduck = factory->createRubberDuck();
+                Goose goose;
+                Quackable* gooseduck = new GooseAdapter(&goose);
+
+                cout << "Duck simulator: with abstract factory" << endl;
+
+                simulate(mallardduck);
+                simulate(redheadduck);
+                simulate(duckcall);
+                simulate(rubberduck);
+                simulate(gooseduck);
+                cout << "The ducks quacked" << QuackCounter::getQuacks() ;
+                cout << " times" << endl;
+                Quackable* ptr = nullptr;
+                ptr = ((QuackCounter*)mallardduck)->getDuck();
+                delete ptr;
+                ptr = ((QuackCounter*)redheadduck)->getDuck();
+                delete ptr;
+                ptr = ((QuackCounter*)duckcall)->getDuck();
+                delete ptr;
+                ptr = ((QuackCounter*)rubberduck)->getDuck();
+                delete ptr;
+                delete mallardduck;
+                delete redheadduck;
+                delete duckcall;
+                delete rubberduck;
+                delete gooseduck;
+
             }
         private:
         protected:

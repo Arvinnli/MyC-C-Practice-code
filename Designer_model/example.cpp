@@ -134,10 +134,6 @@ namespace Auto_ptr{
         weak_ptr<Base1> wptr(shptr);
         cout << wptr.use_count() << endl;
 
-        // if(!wptr.expired()){
-        //     shared_ptr<Base1> shptr2 = wptr.lock();
-            
-        // }
 
 
         
@@ -169,7 +165,9 @@ namespace tmp{
     class B{
         public:
             B(){}
-            
+            ~B(){
+                cout << __FUNCTION__ << endl;
+            }
         private:
         protected:
     };
@@ -182,8 +180,12 @@ namespace tmp{
         protected:
     };
     void run(){
-        B b;
-        Test t(b);
+        B* b = new B();
+        {
+            shared_ptr<B> ptr(b);
+            
+        }
+        cout << __FUNCTION__ << endl;
 
     }
 }
