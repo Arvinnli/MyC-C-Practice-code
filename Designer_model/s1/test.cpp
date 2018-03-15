@@ -626,7 +626,6 @@ namespace music_8bit{
         }
     }
 }
-
 namespace character_weapon{
     struct WeaponBehavior{
         public:
