@@ -60,7 +60,9 @@ static void test_parse_expect_value(){
 }
 int main(int argc,char** argv){
     test_parse();
+    test_parse_expect_value();
     printf("%d/%d (%3.2f%%) passed\n",test_pass,test_count,test_pass*100.0/test_count);
-
+    // const char* str = "hello";
+    // printf("strlen:%d\n",strlen(str));
     return 0;
 }

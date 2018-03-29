@@ -1,0 +1,2 @@
+make obj
+make run
