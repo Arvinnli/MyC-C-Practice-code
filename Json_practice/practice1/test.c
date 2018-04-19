@@ -26,9 +26,17 @@ do{\
     EXPECT_EQ_INT(LEPT_NULL,lept_get_type(&value));\
 }while(0)
 
-
-
 #define EXPECT_EQ_INT(expect,actual) EXPECT_EQ_BASE((expect)==(actual),expect,actual,"%d")
+#define EXPECT_EQ_DOUBLE(expect,actual) EXPECT_EQ_BASE((expect)==(actual),expect,actual,"%lf")
+#define TEST_NUMBER(expect,json)\
+do{\
+    lept_value value;\
+    EXPECT_EQ_INT(LEPT_PARSE_OK,lept_parse(&value,json));\
+    EXPECT_EQ_INT(LEPT_NUMBER,lept_get_type(&value));\
+    EXPECT_EQ_DOUBLE(expect,lept_get_number(&value));\
+}while(0)
+
+
 static void test_parse_null(){
     lept_value value;
     value.type = LEPT_TRUE;
@@ -58,10 +66,49 @@ static void test_parse_expect_value(){
     TEST_ERROR(LEPT_PARSE_EXPECT_VALUE,"");
     TEST_ERROR(LEPT_PARSE_EXPECT_VALUE," ");
 }
+static void test_parse_number() {
+    TEST_NUMBER(0.0, "0");
+    TEST_NUMBER(0.0, "-0");
+    TEST_NUMBER(0.0, "-0.0");
+    TEST_NUMBER(1.0, "1");
+    TEST_NUMBER(-1.0, "-1");
+    TEST_NUMBER(1.5, "1.5");
+    TEST_NUMBER(-1.5, "-1.5");
+    TEST_NUMBER(3.1416, "3.1416");
+    TEST_NUMBER(1E10, "1E10");
+    TEST_NUMBER(1e10, "1e10");
+    TEST_NUMBER(1E+10, "1E+10");
+    TEST_NUMBER(1E-10, "1E-10");
+    TEST_NUMBER(-1E10, "-1E10");
+    TEST_NUMBER(-1e10, "-1e10");
+    TEST_NUMBER(-1E+10, "-1E+10");
+    TEST_NUMBER(-1E-10, "-1E-10");
+    TEST_NUMBER(1.234E+10, "1.234E+10");
+    TEST_NUMBER(1.234E-10, "1.234E-10");
+    TEST_NUMBER(0.0, "1e-10000"); /* must underflow */
+}
+static void test_parse_invalid_value() {
+    /* ... */
+    /* invalid number */
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "+0");
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "+1");
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, ".123"); /* at least one digit before '.' */
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "1.");   /* at least one digit after '.' */
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "INF");
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "inf");
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "NAN");
+    TEST_ERROR(LEPT_PARSE_INVALID_VALUE, "nan");
+}
 int main(int argc,char** argv){
-    test_parse();
-    test_parse_expect_value();
+    // test_parse();
+    test_parse_number();
+    test_parse_invalid_value();
     printf("%d/%d (%3.2f%%) passed\n",test_pass,test_count,test_pass*100.0/test_count);
+    // char* str = "0.323";
+    // char* end;
+    // printf("str:%lf\n",strtod(str,&end));
+    
+    
     // const char* str = "hello";
     // printf("strlen:%d\n",strlen(str));
     return 0;

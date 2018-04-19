@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 typedef struct{
     const char* json;
 }lept_context;
@@ -19,18 +20,45 @@ int lept_parse(lept_value* value,const char* json){
     // value->type = LEPT_NULL;
     lept_parse_whitespace(&context);
     ret = lept_parse_value(&context,value);
+    
+    // printf("value->n:%lf\n",value->n);
+    
     if(ret==LEPT_PARSE_OK){
         lept_parse_whitespace(&context);
         if(*context.json != 0){
             ret = LEPT_PARSE_ROOT_NOT_SINGULAR;
         }
     }
+    // printf("value->n:%lf\n",value->n);
     return ret;
 }
 lept_type lept_get_type(const lept_value* v){
     return v->type;
 }
+
+
+double lept_get_number(const lept_value* value){
+    assert(value!=NULL&&value->type == LEPT_NUMBER);
+    return value->n;
+}
+
+
+
 #define EXPECT(c,ch) do{assert(*c->json==(ch));c->json++;}while(0)
+
+static int lept_parse_number(lept_context* context,lept_value* value){
+    char* end;
+    if(context->json[0]=='+'){
+        return LEPT_PARSE_INVALID_VALUE;
+    }
+    value->n = strtod(context->json,&end);
+    if(context->json == end){
+        return LEPT_PARSE_INVALID_VALUE;
+    }
+    context->json = end;
+    value->type = LEPT_NUMBER;
+    return LEPT_PARSE_OK;
+}
 
 static void lept_parse_whitespace(lept_context* context){
     const char* p = context->json;
@@ -79,6 +107,7 @@ static int lept_parse_literal(lept_context* context,lept_value* value,const char
 }
 static int lept_parse_value(lept_context* context,lept_value* value){
     // printf("json:%s\n",context->json);
+    int ret;
     char* str;
     lept_type type;
     switch(*context->json){
@@ -86,8 +115,9 @@ static int lept_parse_value(lept_context* context,lept_value* value){
         case 't':str = "true";type = LEPT_TRUE;break;
         case 'f':str = "false";type = LEPT_FALSE;break;         
         case '\0':return LEPT_PARSE_EXPECT_VALUE;        
-        default:goto defau1t;
-        defau1t:return LEPT_PARSE_INVALID_VALUE;//It's just a joke;
+        default:
+        return lept_parse_number(context,value);//It's just a joke;
+        // return ret;
     }
     return lept_parse_literal(context,value,str,type);
 }
