@@ -9,7 +9,7 @@ using namespace std;
 namespace tmp{
     //GBK:: 面试经典问题——每次可以走 1 级或 2 级，上 100 级台阶有多少走法
 
-    typedef dat_t unsigned char;
+    typedef  unsigned char dat_t;
     #define max 0xff;
 
     class Digital{
@@ -37,23 +37,68 @@ namespace tmp{
                 return _dat;
             }
 
-            operator +(Digital digital){
+            Digital operator+(Digital digital){
                 dat_t tmp,count = 0;
+                Digital dt = *this;
+                int m = digital.getLen() > this->getLen() ? digital.getLen() : this->getLen();
+                
+                for(int i=0;i < m ;i++){
+                    tmp = 0xff - this->getDat()[i];
+                    if(tmp<digital.getDat()[i] + count){
+                        dt.getDat()[i] = digital.getDat()[i] + count - tmp;
+                        if(dt.getLen()==m){
+                            dt.setLen(dt.getLen()+1);
+                        }
+                        if(i = m-1){
+                            ++m;
+                        }
+                        count = 1;   
+                    }else{
+                        dt.getDat()[i] = this->getDat()[i] + count + digital.getDat()[i];
+                    }
+                }
+                return dt;
                 for(int i=0;i<digital.getLen()||i<this->getLen();i++){
-                    tmp = 0xffffffff - this->_dat[i];
+                    tmp = 0xff - this->_dat[i];
                     if(tmp<(digital.getDat())[i] + count){
                         tmp = (digital.getDat())[i] + count - tmp;
                         count = 1;
+                        dt.setLen(dt.getLen()+1);
+                        // dt._dat[i] = digital.getDat()[i] - tmp;         
+                        dt.getDat()[i] = digital.getDat()[i] - tmp;         
                     }else{
-                        this->getDat()[i] = this->getDat()[i] + count + digital.getDat())[i];
+                        dt.getDat()[i] = this->getDat()[i] + count + digital.getDat()[i];
                     }
-                    this->_len++;
+                    
+                }
+                return dt;
+            }
+            // operator=(Digital digital){
+            //     *this = digital
+            // }
+            void showDec(){
+                char buf[1024];
+                for(int i=_len-1;i>=0;i--){
+
                 }
             }
-            void show(){
-                 for(int i=0;i<_len;i++){
-                    cout << "dat[" << i << "]=" << dat[i] << endl;
+            void showHex(){
+                cout << "0x" ;
+                // cout << hex;
+                // cout << "len" << _len << endl;
+                for(int i=_len-1;i>=0;i--){
+                    // cout << "dat[" << i << "]=" << (int)_dat[i] << endl;
+                    if(_dat[i]==0){
+                        cout << "00";
+                    }else if(_dat[i]&0xf0==0){
+                        cout << "0";
+                        cout << (int)_dat[i];
+                    }else{
+                        cout << hex << (int)_dat[i] ;     
+                    }
                 }
+                cout << endl;
+                cout << dec ;
             }
         private:
             dat_t _dat[1024];
@@ -62,22 +107,17 @@ namespace tmp{
     };  
 
 
-    class A{
+    class BigData{
         public:
-            A(){}
-            int* getDat(){
-                return dat;
+            BigData(int dat){
+                str = 
             }
-            void show(){
-                for(int i=0;i<10;i++){
-                    cout << "dat[" << i << "]=" << dat[i] << endl;
-                }
-            }
+            
         private:
-            int dat[10];
+            string str;
+            int len;
         protected:
     };
-
 
     //递归 recursion 
     int getMethod(int step){       
@@ -111,30 +151,27 @@ namespace tmp{
         mem[1] = 1; //为什么要提前初始化这一项？
         for (i = 2; i <= step; i++) {
             mem[i] = mem[i-1] + mem[i-2];
+            
         }
         return mem[step];
     }
-
+    Digital getMethod_dp2(int step, Digital mem[]) {
+        int i;
+        mem[0] = 1;
+        mem[1] = 1; //为什么要提前初始化这一项？
+        for (i = 2; i <= step; i++) {
+            mem[i] = mem[i-1] + mem[i-2];
+            mem[i].showHex();
+        }
+        return mem[step];
+    }
     void run(int argc,char** argv){
-        // long long buf[101] = {0};
-        // int n = atoi(argv[1]);
-        // getMethod_dp1(n,buf);
 
-        
-        // // for(int i=0;buf[i]&&i<10*1024;i++){
-        // for(int i=0;i<101;i++){
-        //     cout << "buf[" << i << "]=" << buf[i] << endl;
-        // }
-        Digital d
-
+        Digital buf[128];
+        int n = atoi(argv[1]);
+        getMethod_dp2(n,buf);
     }
 
-    // // Fibonacci
-    // F[n+1] = F[n] + F[n-1];
-    // F[n] = F[n-1] + F[n-2];
-    // ....
-    // F[2] = F[1] + F[0];
-    // F[1] = 1;F[0] =0;
 
 
 }
