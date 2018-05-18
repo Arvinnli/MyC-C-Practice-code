@@ -7,7 +7,11 @@
 #include <strings.h>
 #include <string.h>
 #include <string>
+#include <iostream>
+
 #pragma comment(lib,"Winmm.lib")
+
+using namespace std;
 
 static void _play(const char *name);
 static void _pause(const char *name);
@@ -23,7 +27,7 @@ class State{
 };
 class Player{
     public:
-        Player();
+        Player(const char* file);
         ~Player();
         void play();
         void pause();
@@ -32,7 +36,7 @@ class Player{
             mCurState = state;
         }
         void setFile(const char* file){
-            mFIle = file;
+            mFile = file;
         }
         State* getCurState(){
             return mCurState;
@@ -46,8 +50,8 @@ class Player{
         State* getStopState(){
             return mStopState;
         }
-        string getFile(){
-            return mFIle;
+        const char* getFile(){
+            return mFile;
         }
     private:
         State* mCurState;
@@ -83,7 +87,7 @@ class PauseState:public State{
             mPlayer = player;
         }
         virtual void play(const char* name){
-            _play(resume);
+            _play(name);
             mPlayer->setState(mPlayer->getPlayingState());
         }
         virtual void pause(const char* name){
@@ -121,6 +125,7 @@ Player::Player(const char* file){
     mPauseState = new PauseState(this);
     mStopState = new StopState(this);
     mCurState = mStopState;
+    mFile = file;
 }
 Player::~Player(){
     delete (PlayingState*)mPlayingState;
@@ -131,33 +136,36 @@ Player::~Player(){
     mStopState = NULL;
 }
 void Player::play(){
-    mCurState->play();
+    mCurState->play(mFile);
 }
 void Player::pause(){
-    mCurState->pause();
+    mCurState->pause(mFile);
 }
 void Player::stop(){
-    mCurState->stop();
+    mCurState->stop(mFile);
 }
 
 int main(int argc,char** argv){
     char buf[20] = {0};
+   
     if(argc<2){
         printf("Missing parameters.");
         exit(1);
     }
+    Player player(argv[1]);
     while(1){
         printf("play/pause/stop/quit\n");
         scanf("%s",buf);
         if(!strncmp(buf,"play",4)){
-            play(argv[1]);
+            player.play();
         }else if(!strncmp(buf,"pause",5)){
-            pause(argv[1]);
+            player.pause();
         }else if(!strncmp(buf,"stop",4)){
-            stop(argv[1]);
+            player.stop();
         }else if(!strncmp(buf,"quit",4)){
             break;
         }
+        system("cls");
     }
     // getchar();
     system("cls");
@@ -171,9 +179,9 @@ void _play(const char* name)          //播放音乐
     wsprintf(cmd, "open %s", name);  
     // 发送命令。  
     // 一、存储命令的数组首地址，二、接受MCI返回的信息，三、接受数组的长度，四、没用，NULL  
-    mciSendString(cmd, "", 0, NULL);  
+    mciSendString(cmd,(char*)"", 0, NULL);  
     wsprintf(cmd, "play %s", name);  
-    mciSendString(cmd, "", 0, NULL);  
+    mciSendString(cmd, (char*)"", 0, NULL);  
 }  
 
 // 暂停当前曲，曲号由curno记录  
@@ -181,7 +189,7 @@ void _pause(const char *name)        // 暂停播放
 {  
     char cmd[MAX_PATH] = {0};  
     wsprintf(cmd, "pause %s", name);  
-    mciSendString(cmd,"",0,NULL);  
+    mciSendString(cmd,(char*)"",0,NULL);  
 }  
   
 // 停止当前曲，曲号由curno记录  
@@ -189,7 +197,7 @@ void _stop(const char *name)
 {  
     char cmd[MAX_PATH] = {0};   
     wsprintf(cmd, "stop %s", name);  
-    mciSendString(cmd,"",0,NULL);   
+    mciSendString(cmd,(char*)"",0,NULL);   
     wsprintf(cmd, "close %s", name);  
-    mciSendString(cmd,"",0,NULL);   
+    mciSendString(cmd,(char*)"",0,NULL);   
 }  
