@@ -184,15 +184,13 @@ void _play(const char* name)          //播放音乐
     mciSendString(cmd, (char*)"", 0, NULL);  
 }  
 
-// 暂停当前曲，曲号由curno记录  
 void _pause(const char *name)        // 暂停播放  
 {  
     char cmd[MAX_PATH] = {0};  
     wsprintf(cmd, "pause %s", name);  
     mciSendString(cmd,(char*)"",0,NULL);  
 }  
-  
-// 停止当前曲，曲号由curno记录  
+
 void _stop(const char *name)           
 {  
     char cmd[MAX_PATH] = {0};   
