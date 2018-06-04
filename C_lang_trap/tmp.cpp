@@ -34,7 +34,7 @@ namespace pwd{
     }
 }
 #endif
-namespace tmp{
+namespace tmp1{
     jmp_buf buf;
     void handler(int sig){
         std::cout << "you press ctrl+c" << std::endl;
@@ -54,7 +54,28 @@ namespace tmp{
         }
     }
 }
+namespace tmp{
+    class Singleton;
+    class Singleton{
+        public:
+            Singleton(){}
+            static Singleton* getInstance();
 
+        private:
+            static Singleton* mPtr;
+        protected:
+    };
+    Singleton* Singleton::mPtr = NULL;
+    Singleton* Singleton::getInstance(){
+        if(mPtr==NULL){
+            mPtr=new Singleton();
+        }
+        return mPtr;
+    }
+    void run(){
+        Singleton::getInstance();
+    }
+}
 
 int main(int argc,char** argv){
     tmp::run();
