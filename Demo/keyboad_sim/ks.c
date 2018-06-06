@@ -42,9 +42,20 @@ int main(int argc,char** argv){
         GetCursorPos(&point);
         
         Sleep(1000);
-        SetCursorPos(point.x+1,point.y);  
+        SetCursorPos(point.x+1,point.y);
+
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0,0); //左键按下  
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);  //左键松开 
+
         Sleep(1000);
         SetCursorPos(point.x,point.y);  
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0,0); //左键按下  
+        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);  //左键松开  
+        // keybd_event('J', 0, 0, 0); //按下  
+        // Sleep(200);
+        // keybd_event('J', 0, 2, 0); //松开  
+        // Sleep(1100);
+        // putchar('\n');
 
 
     }
