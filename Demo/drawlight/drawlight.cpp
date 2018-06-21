@@ -10,8 +10,9 @@ extern "C"{
 
 typedef struct{
     float sd;
-    float emissive;
-    float reflectivity;
+    float emissive;         //光强度
+    float reflectivity;     //反射
+    float eta;              //折射率
 }Result;
 
 #define TWO_PI 6.28318530718f
@@ -32,7 +33,7 @@ float trace(float ox,float oy,float dx,float dy,int depth);
 float planeSDF(float x,float y,float px,float py,float nx,float ny);
 Result scene(float x,float y);
 void gradient(float x,float y,float* nx,float* ny);
-
+int refract(float ix,float iy,float nx,float ny,float eta,float* rx,float* ry);
 
 
 int main(int argc,char** argv){
@@ -103,22 +104,43 @@ void reflect(float ix, float iy, float nx, float ny, float* rx, float* ry) {
     *ry = iy - idotn2 * ny;
 }
 
+int refract(float ix, float iy, float nx, float ny, float eta, float* rx, float* ry) {
+    float idotn = ix * nx + iy * ny;
+    float k = 1.0f - eta * eta * (1.0f - idotn * idotn);
+    if (k < 0.0f)
+        return 0; // 全内反射
+    float a = eta * idotn + sqrtf(k);
+    *rx = eta * ix - a * nx;
+    *ry = eta * iy - a * ny;
+    return 1;
+}
+
 float trace(float ox, float oy, float dx, float dy, int depth) {
-    float t = 0.0f;
+    float t = 1e-3f;
+    float sign = scene(ox, oy).sd > 0.0f ? 1.0f : -1.0f; // 内还是外？
     for (int i = 0; i < MAX_STEP && t < MAX_DISTANCE; i++) {
         float x = ox + dx * t, y = oy + dy * t;
         Result r = scene(x, y);
-        if (r.sd < EPSILON) {
+        if (r.sd * sign < EPSILON) { // 判断是否到达表面时要考虑内外
             float sum = r.emissive;
-            if (depth < MAX_DEPTH && r.reflectivity > 0.0f) {
-                float nx, ny, rx, ry;
+            if (depth < MAX_DEPTH && (r.reflectivity > 0.0f || r.eta > 0.0f)) {
+                float nx, ny, rx, ry, refl = r.reflectivity;
                 gradient(x, y, &nx, &ny);
-                reflect(dx, dy, nx, ny, &rx, &ry);
-                sum += r.reflectivity * trace(x + nx * BIAS, y + ny * BIAS, rx, ry, depth + 1);
+                nx *= sign; ny *= sign; // 在内的话，要反转法线
+                if (r.eta > 0.0f) {
+                    if (refract(dx, dy, nx, ny, sign < 0.0f ? r.eta : 1.0f / r.eta, &rx, &ry))
+                        sum += (1.0f - refl) * trace(x - nx * BIAS, y - ny * BIAS, rx, ry, depth + 1);
+                    else
+                        refl = 1.0f; // 全内反射
+                }
+                if (refl > 0.0f) {
+                    reflect(dx, dy, nx, ny, &rx, &ry);
+                    sum += refl * trace(x + nx * BIAS, y + ny * BIAS, rx, ry, depth + 1);
+                }
             }
             return sum;
         }
-        t += r.sd;
+        t += r.sd * sign;
     }
     return 0.0f;
 }
@@ -135,10 +157,9 @@ float sample(float x, float y) {
 
 Result scene(float x,float y){
   
-    Result a = {  circleSDF(x, y, 0.4f,  0.2f, 0.1f), 2.0f, 0.0f };
-    Result b = {     boxSDF(x, y, 0.3f,  0.8f, TWO_PI / 16.0f, 0.1f, 0.1f), 0.0f, 0.9f };
-    Result c = {     boxSDF(x, y, 0.8f,  0.3f, TWO_PI / 16.0f, 0.1f, 0.1f), 0.0f, 0.9f };
-    return unionOp(unionOp(a, b), c);
+    Result a = { circleSDF(x, y, -0.1f, -0.1f, 0.1f), 5.0f, 0.0f, 0.0f };
+    Result b = {    boxSDF(x, y, 0.5f, 0.5f, 0.0f, 0.3, 0.2f), 0.0f, 0.2f, 1.5f};
+    return unionOp(a, b);
 
 
 #if 0
