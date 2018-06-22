@@ -5,8 +5,8 @@ SRC:=$(OBJ).cpp
 
 
 run:app
-	./$(APP)
+	./$(OBJ)
 	
 
 app:$(SRC)
-	$(CC) $^ -o $(APP)
+	$(CC) $^ -o $(OBJ)
