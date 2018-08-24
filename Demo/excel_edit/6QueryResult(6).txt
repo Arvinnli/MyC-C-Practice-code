@@ -1,0 +1,35 @@
+id|BZID|State|Headline|Owner|Contacter|
+SPCSS00501871|915630|Opened|[SC7731E][CARON][cm05]进入相机进行拍照，拍照后查看图片-详情，按返回键返回预览界面过程中，反应慢。|qiao.lei|许娇|
+SPCSS00506337|923020|Opened|[SC7731E][CARON][cm05]客户反馈：DUT get stuck/restart while try to play Ultimate TeenPatti game|wuht|龚玲珑|
+SPCSS00505616|921856|Opened|[SC7731E][CARON][cm05]【量产加急】相机后摄预览界面水波纹明显|qiao.lei|龚玲珑|
+SPCSS00502348|916417|NeedInfo|[SC7731E][CARON][cm05]客户反馈：SD Card Insertion Notification unavailable except once when we first time after Upgarding DUT insert it|yangyang0621|许娇|
+SPCSS00499375|911619|Opened|[SC7731E][CARON][cm05]【量产加急】客户反馈：Play store is not Auto Updating Pre installed apps over Wi-Fi at 04:59 PM|sam.chiu|龚玲珑|
+SPCSS00506563|923383|Submitted|[SC7731E][CARON][CM05]应用层访问节点权限。|sam.chiu|谭训成|
+SPCSS00503998|919222|NeedInfo|[SC7731E][CARON][cm05]【量产加急】客户反馈：内存只剩500M，联系人4000条，短信存10000条，进入联系人时响应慢|wangwp0829|龚玲珑|
+SPCSS00503884|918976|Opened|[SC7731E][CARON][CM05]【申请加急处理】CTS 测试项：CtsCameraTestCases--android.hardware.camera2.cts.MultiViewTest#testDualCameraPreview fail|Xianyun.He|罗承军|
+SPCSS00500148|912875|Opened|[SC7731E][CARON][CM05]【申请加急处理】GSI 测试项：CtsJvmtiTrackingHostTestCases--android.jvmti.cts.JvmtiHostTestAllocationTracking#testJvmti fail|leon.wang|罗承军|
+SPCSS00496957|907649|Opened|[SC7731E][CARON][CM05]【量产加急】客户反馈：CM05后摄像头主观优化|qiao.lei|罗荣花|
+SPCSS00506305|922954|NeedInfo|[SC7731E][CARON][cm05]客户反馈：把联系人导入至SIM卡，部分导入失败|wangkai1008|龚玲珑|
+SPCSS00502328|916395|Opened|[SC7731E][CARON][cm05]客户反馈：UC Browser In Default SMS apps and some default app not selected by default|xubb0326|许娇|
+SPCSS00504488|920041|Opened|[SC7731E][CARON][CM05]后摄像头模组兼容。|nanjun.zhong|谭训成|
+SPCSS00505629|921870|Opened|[SC7731E][CARON][cm05]【量产加急】样机在黑暗处进行后摄拍照，进入相册点击照片（此时状态栏会显示出来），观察顶端或低端黑色区域均发现有多条横线|jiaqiang.pei|许娇|
+SPCSS00506232|922815|NeedInfo|[SC7731E][CARON][cm05]客户反馈：编辑彩信时调用相机需要3-4秒才可进入预览界面，建议优化在1秒左右|yu.li|许娇|
+SPCSS00506241|922828|Opened|[SC7731E][CARON][cm05]客户反馈：DUT isn't responding / restart while try to play Coin Master|wuht|龚玲珑|
+SPCSS00506292|922920|NeedInfo|[SC7731E][CARON][cm05]客户反馈：Youtube can not reopen when go to message by using message popup|Glen.Wu|许娇|
+SPCSS00506201|922770|Opened|[SC7731E][CARON][cm05]客户反馈： DUT get stuck/restart while open StarMaker apk|wuht|龚玲珑|
+SPCSS00506224|922797|NeedInfo|[SC7731E][CARON][cm05]客户反馈：System UI isn't responding in DUT|wentong.zhang|龚玲珑|
+SPCSS00506180|922743|Submitted|[SC7731E][CARON][cm05]客户反馈：短信中录制视频时来电，接通后挂断，未保存录制的视频|zhiguo.li|许娇|
+SPCSS00503881|918974|Opened|[SC7731E][CARON][CM05]【申请加急处理】CTS 测试项： CtsCameraTestCases--android.hardware.camera2.cts.CameraDeviceTest#testCameraDeviceCapture fail|Xianyun.He|罗承军|
+SPCSS00505681|921937|Opened|[SC7731E][CARON][CM05]【申请加急处理】CTS 测试项：CtsCameraTestCases--android.hardware.cts.CameraGLTest#testCameraToSurfaceTextureMetadata fail|nanjun.zhong|罗承军|
+SPCSS00501297|914684|NeedInfo|[SC7731E][CARON][cm05]客户反馈：打开Gmial时间太慢为4425MS，lava对比机SP502:1967MS，请优化|wangkui0409|龚玲珑|
+SPCSS00505012|920919|NeedInfo|[SC7731E][CARON][CM05]CM05单摄背景虚化功能，当对焦完成后点拍照，偶现拍照模糊。可能是再次触发了TAF的动作，能否实现对焦完成后，不要再触发TAF动作。|tangqing1214|张杰|
+SPCSS00505722|921996|Opened|[SC7731E][CARON][CM05]【申请加急处理】CTS 测试项：CtsCameraTestCases--android.hardware.cts.CameraTest#testPreviewFpsRange  fail|nanjun.zhong|罗承军|
+SPCSS00505738|922014|NeedInfo|[SC7731E][CARON][cm05]【量产加急】相机进行拍照后返回主菜单界面，进入设置后，屏幕闪一下，样机自动关机，手动开机查看电量，电池电量显示还有89%。|wenning.wang|许娇|
+SPCSS00488420|895654|NeedInfo|[SC7731E][CARON][CM05]墨西哥SIMLOCK需求|doris.wang|吕海庆|
+SPCSS00496951|907645|Opened|[SC7731E][CARON][CM05]【量产加急】客户反馈了前摄主观确认结果，申请前摄像头主观优化!|shanren.ou|罗荣花|
+SPCSS00494189|903874|Opened|[SC7731E][CARON][cm05]相机-打开HDR模式-逆光拍照-保持拿手机的手不动，成像慢，导致有重影|xiaowei.liu|龚玲珑|
+SPCSS00501308|914726|NeedInfo|[SC7731E][CARON][cm05]客户反馈：打开信时间太慢为3900ms，lava对比机SP502:1133MS，请优化|lubl0409|龚玲珑|
+SPCSS00500560|913521|Opened|[SC7731E][CARON][CM05]【量产加急】客户反馈：When click photo of front camera in lighting environment light effect come on face .|shanren.ou|许娇|
+SPCSS00506169|922725|Opened|[SC7731E][CARON][cm05]客户反馈：Candy crush saga hang sometimes while playing|wuht|龚玲珑|
+SPCSS00506167|922720|NeedInfo|[SC7731E][CARON][cm05]客户反馈：电量低于15%时，手机可以恢复出厂设置|xiepeng1008|许娇|
+SPCSS00502268|916279|NeedInfo|[SC7731E][CARON][cm05]客户反馈：玩游戏时出现重启|steven.ouyang|龚玲珑|
