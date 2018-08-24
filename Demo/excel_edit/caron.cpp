@@ -72,15 +72,11 @@ int main(int argc,char** argv){
             goto __END;
         }
         // printf("%s\n",tmp.spc_id);
-
-
         n += Csv_get((char*)&r_buf[n],tmp.bzid);
-        // printf("%s\n",tmp.bzid);
-        
+        // printf("%s\n",tmp.bzid);       
        
         n += Csv_get((char*)&r_buf[n],tmp.state);
         // printf("%s\n",tmp.state);
-
 
         n += Csv_get((char*)&r_buf[n],tmp.headline);
         // printf("%s\n",tmp.headline);
