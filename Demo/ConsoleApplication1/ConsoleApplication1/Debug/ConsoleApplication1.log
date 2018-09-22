@@ -1,0 +1,6 @@
+﻿  ConsoleApplication1.cpp
+e:\vs2015proj\vs2017prj\consoleapplication1\consoleapplication1\consoleapplication1.cpp(142): warning C4101: “B”: 未引用的局部变量
+e:\vs2015proj\vs2017prj\consoleapplication1\consoleapplication1\consoleapplication1.cpp(142): warning C4101: “R”: 未引用的局部变量
+e:\vs2015proj\vs2017prj\consoleapplication1\consoleapplication1\consoleapplication1.cpp(139): warning C4101: “b”: 未引用的局部变量
+e:\vs2015proj\vs2017prj\consoleapplication1\consoleapplication1\consoleapplication1.cpp(142): warning C4101: “G”: 未引用的局部变量
+  ConsoleApplication1.vcxproj -> E:\VS2015proj\vs2017prj\ConsoleApplication1\Debug\ConsoleApplication1.exe
