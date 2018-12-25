@@ -18,13 +18,13 @@ int main(int argc,char** argv){
     while(1){
         GetCursorPos(&point);
         
-        Sleep(1000);
+        Sleep(10000);
         SetCursorPos(point.x+1,point.y);
 
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0,0); //
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);  //
 
-        Sleep(1000);
+        Sleep(10000);
         SetCursorPos(point.x,point.y);  
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0,0); //
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);  //
